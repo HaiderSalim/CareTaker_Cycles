@@ -1,6 +1,4 @@
-﻿
-using UnityEditor.VersionControl;
-using UnityEngine;
+﻿using UnityEngine;
 
 /*
     This file has a commented version with details about how each line works. 
@@ -31,10 +29,10 @@ public class ThirdPersonController : MonoBehaviour
     float jumpElapsedTime = 0;
 
     // Player states
-    bool isJumping = false;
-    bool isSprinting = false;
-    bool isCrouching = false;
-    bool isShooting = false;
+    [HideInInspector] public bool isJumping = false;
+    [HideInInspector] public bool isSprinting = false;
+    [HideInInspector] public bool isCrouching = false;
+    [HideInInspector] public bool isShooting = false;
 
     // Inputs
     float inputHorizontal;
@@ -43,7 +41,7 @@ public class ThirdPersonController : MonoBehaviour
     bool inputCrouch;
     bool inputSprint;
 
-    Animator animator;
+    [HideInInspector] public Animator animator;
     CharacterController cc;
 
 
@@ -88,19 +86,17 @@ public class ThirdPersonController : MonoBehaviour
             animator.SetBool("run", cc.velocity.magnitude > minimumSpeed );
 
             // Sprint
-            // isSprinting = cc.velocity.magnitude > minimumSpeed && inputSprint;
-            // animator.SetBool("sprint", isSprinting );
+            isSprinting = cc.velocity.magnitude > minimumSpeed && inputSprint;
+            animator.SetBool("sprint", isSprinting );
             
             //Shoot
             if (Input.GetMouseButtonDown(0))
             {
-                isShooting = true;
                 animator.SetBool("pause shoot" , isShooting);
                 animator.SetTrigger("shoot");
             }
             else if (Input.GetMouseButtonUp(0))
             {
-                isShooting = false;
                 animator.SetBool("pause shoot" , isShooting);
             }
 
@@ -176,7 +172,7 @@ public class ThirdPersonController : MonoBehaviour
         forward = forward * directionZ;
         right = right * directionX;
 
-        if (directionX != 0 || directionZ != 0)
+        if (directionX != 0 || directionZ != 0 || isShooting)
         {
             float angle = Mathf.Atan2(forward.x + right.x, forward.z + right.z) * Mathf.Rad2Deg;
             Quaternion rotation = Quaternion.Euler(0, angle, 0);

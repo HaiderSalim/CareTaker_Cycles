@@ -4,6 +4,7 @@ Shader "Lpk/LightModel/ToonLightBase"
     {
         _BaseMap            ("Texture", 2D)                       = "white" {}
         _BaseColor          ("Color", Color)                      = (0.5,0.5,0.5,1)
+        [Enum(Off, 0, Front, 1, Back, 2)] _Cull ("Cull Mode", Float) = 2
         
         [Space]
         _ShadowStep         ("ShadowStep", Range(0, 1))           = 0.5
@@ -30,6 +31,7 @@ Shader "Lpk/LightModel/ToonLightBase"
         Pass
         {
             Name "UniversalForward"
+            Cull [_Cull]
             Tags
             {
                 "LightMode" = "UniversalForward"
